@@ -25,6 +25,8 @@ $(document).ready(function() {
 
       // If this is the maximum replication ID known and hasn't been processed yet
       if ($(this).data("replicate_id") == maxReplicationId && hashTable[$(this).data("replicate_id")]) {
+        // **THIS BLOCK TARGETS SPECIFIC INPUT FIELDS FOR CLEARING. CUSTOM FIELDS AND FIELDS
+        // THAT WILL BE CLEARED ON ADDING A NEW BLOCK CAN BE ADDED, REMOVED, OR UPDATED HERE**
         // Clear input fields within this block
         // First name, Last name, Email, Mobile, Preferred Class Year, Preferred Name, and Birthdate fields are targeted for clearing
         $(this).find("div[data-export='sys:first'], div[data-export='sys:last'], div[data-export='sys:email'], div[data-export='sys:mobile'], div[data-export='sys:field:preferred_class_year'], div[data-export='sys:preferred']").find("input[type='text'], input[type='email']").val("");
