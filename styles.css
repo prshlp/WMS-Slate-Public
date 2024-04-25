@@ -1,0 +1,314 @@
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+#content{
+ padding: 0px !important; 
+}
+
+.c_inner-container.cr {
+   
+    padding: 0 20px 1.75em;
+}
+
+body {
+    margin: 0 !important;
+}
+
+:root {
+    /* Color scheme */
+    --main-bg-color: #FFF;
+    --main-text-color: #500082;
+    --secondary-text-color: #280050;
+    --input-border-color: #ccc;
+    --input-text-color: #000;
+    --form-label-color: #555;
+    --input-focus-bg-color: #f9f9f9;
+    --input-bg-color: #f1f1f1;
+    --button-hover-bg-color: var(--secondary-text-color);
+    --radio-label-bg-color: lightgray;
+    --radio-label-hover-bg-color: var(--secondary-text-color);
+    --radio-label-selected-bg-color: var(--main-text-color);
+    --box-shadow-color: rgba(53,61,72,0.25);
+}
+
+/* the main floating container ... using the standard #content div */
+div[id^="form_"] form {
+    max-width: 775px;
+    width: 100%;
+    background: var(--main-bg-color);
+    margin: 10px auto 0;
+    padding: 55px 4% 35px 4% !important;
+    box-shadow: 0 0 18px var(--box-shadow-color);
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+
+
+#form_response_banner{
+  background: #52297c !important;
+    color: #ffffff;
+    
+}
+
+#form_response_banner a {
+  color: #ffbe0a;
+}
+
+a.replicate_delete {
+  font-size:large;
+  font-weight:bold !important;
+  
+  padding: 1px 10px;
+  text-decoration: none;
+  transition: color 0.2s;
+  color: var(--main-text-color);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+a.replicate_insert {
+   
+  background-color: var(--secondary-text-color);
+  font-size:x-large;
+  font-weight:bold;
+  padding: 30px 10px;
+  text-decoration: none;
+  transition: color 0.2s;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+a.replicate_insert:hover,
+a.replicate_delete:hover{
+  background-color: #cccccc82;
+  color: var(--secondary-text-color);
+	transition: background-color .25s linear,border-color .25s linear,box-shadow .25s linear,color .25s linear,opacity .25s linear;
+}
+
+td a.replicate_insert {
+    display: inline-block; /* or use 'block' depending on your layout */
+    width: 100%;          /* ensure it takes the full width of the parent td */
+    text-align: center ;    /* aligns the text to the right */
+}
+
+/* the submit button */
+form button.default {
+    width: 99%;
+    background-color: var(--main-text-color);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+}
+
+/* hover and focus for the submit button */
+form button.default:hover, form button.default:focus {
+   background-color: var(--main-text-color) !important;
+   color: #ffbe0a;
+  transition: background-color .25s linear,border-color .25s linear,box-shadow .25s linear,color .25s linear,opacity .25s linear;
+}
+
+
+
+/* override styles for the main form title (H1) ... */
+form h1 {
+    font-size: 2.5em;
+    color: var(--main-text-color);
+    text-align: center;
+}
+
+/* ... and the H2-form elements */
+div.form_h2[data-type=h2] .form_label{
+    font-size: 1.25em;
+    font-weight: bold;
+    color: var(--secondary-text-color);
+    text-align: left;
+   // padding: 20px 0px !important;
+}
+
+div.form_h1[data-type=h1] .form_label{
+    font-size: 1.75em;
+    font-weight: bold;
+    color: var(--secondary-text-color);
+    text-align: left;
+   // padding: 20px 0px !important;
+}
+
+
+/* styling input fields */
+.form_container input:not([type="checkbox"]):not([type="radio"]), .form_container select, .form_container textarea {
+    font-size: 16px;
+    padding: 9px;
+    margin: 6px 0 4px;
+    border: 1px solid var(--input-border-color);
+    color: var(--input-text-color);
+    font-family: sans-serif;
+    line-height: normal;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+.form_container select {
+    background-color: var(--input-bg-color);
+}
+
+.form_container input:not([type="checkbox"]):not([type="radio"]), .form_container textarea {
+    width: 100%;
+
+}
+
+
+
+div.form_question.form_layout_table:not([data-type="radio"]):not([data-type="checkbox"]):not([data-type="payment"]) .form_label {
+    vertical-align: middle !important;
+}
+
+
+
+.form_container select:not([aria-label="Month"]):not([aria-label="Day"]):not([aria-label="Year"]):not([aria-label^="Recurring"]) {
+    width: 100%;
+}
+
+.form_container textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form_container input:focus, .form_container select:focus, .form_container textarea:focus {
+    background: var(--input-focus-bg-color) !important;
+}
+
+.form_container fieldset .form_response {
+    padding: 2px 0;
+}
+
+.form_label{
+ font-weight:bold; 
+}
+
+div.form_question.form_header .form_label {
+    /* CSS styles here */
+ 
+    background-color: #efefef;
+    vertical-align: middle !important;
+
+
+ 
+}
+
+tbody.replicate_destination th {
+  padding: 0;
+}
+
+
+
+/* styling for the modal functionality */
+.form-btn-int {
+  background-color: #ececec;
+    color: var(--main-text-color);
+  
+    margin: 0 5px 5px 0;
+    padding: 7px 20px;
+    text-align: center;
+}
+
+.form-btn-int:hover {
+  background-color: #500082 !important;
+    color: white;
+  transition: background-color .25s linear,border-color .25s linear,box-shadow .25s linear,color .25s linear,opacity .25s linear;
+}
+/* Modal Content */
+.modal-content {
+  position: fixed;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust to exact center */
+  background-color: #fefefe;
+  width: auto; /* Adjust width as needed */
+  border-radius: 10px; /* Optional: for rounded corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: for shadow */
+  -webkit-animation-name: fadeIn; /* Use fadeIn instead of slideIn */
+  -webkit-animation-duration: 0.4s;
+  animation-name: fadeIn;
+  animation-duration: 0.4s
+}
+
+
+/* The Close Button */
+.modal-close {
+  color: white;
+  //float: right;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1;
+  margin-right: auto
+}
+.modal-close:hover,
+.modal-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Some modal header and body overrides */
+.modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 	box-sizing: border-box; 
+  padding: 7px;
+  background-color: #500082;
+  text-align: center;
+  width: 100%;
+}
+.modal-header h2 {
+  flex: 1;
+  margin: 0 auto;
+  color: #fff !important;
+}
+.modal-body {padding: 12px 16px 50px; }
+
+/* Responsive styles for the modal on smaller screens */
+@media only screen and (max-width: 600px) {
+  .modal-content {
+    width: 90%; 
+    margin: 10% auto; 
+  }
+  
+  .modal-header h2 {
+    font-size: smaller; 
+  }
+  
+  .modal-close {
+    font-size: 20px; 
+  }
+}
+
+/* Add Animation */
+@-webkit-keyframes slideIn {
+  from {bottom: -300px; opacity: 0} 
+  to {bottom: 0; opacity: 1}
+}
+
+@keyframes slideIn {
+  from {bottom: -300px; opacity: 0}
+  to {bottom: 0; opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+  from {opacity: 0} 
+  to {opacity: 1}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0} 
+  to {opacity: 1}
+}
