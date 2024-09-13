@@ -1,0 +1,52 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Stylish Button</title>
+    <style type="text/css">.s-button {
+            background-color: #500082!important; /* Button background color */
+            color: white !important; /* Text color */
+            padding: 10px 20px; /* Padding around the text */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            text-decoration: none; /* Remove underline */
+            font-size: 16px; /* Font size */
+
+            display: inline-block; /* Inline block to apply padding */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        .s-button:hover {
+            background-color: #ececec!important; /* Background color on hover */
+          color: #500082 !important; 
+        }
+    </style>
+  </head>
+  <body>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <form action="https://connect.williams.edu/manage/database/portal/edit?cmd=impersonate&amp;portal=PORTAL_GUID" autocomplete="off" data-fw-form="1" method="post" novalidate="novalidate" onsubmit="return false;" style="width: 550px;">
+    <div class="header dialog_closeable" style="display: none">
+      Impersonate
+      <div aria-pressed="false" class="dialog_close" data-clickable="1" role="button" tabindex="0" title="Close">
+      </div>
+    </div>
+
+    <div class="content" style="display:none; height: 200px;">
+      <table class="plain">
+        <colgroup>
+          <col style="width: 100px;" />
+          <col />
+        </colgroup>
+        <tbody>
+          <tr>
+            <th>Record</th>
+            <td><input data-validate="{ required: true, help: 'Record is required.' }" id="record" name="record" required="required" type="hidden" value="PERSON_GUID" /><input aria-autocomplete="list" aria-controls="suggest_00ad6081-0eff-46ef-a271-945f144e7a4f" aria-expanded="false" aria-owns="suggest_00ad6081-0eff-46ef-a271-945f144e7a4f" autocomplete="off" class="expanded" data-fw-transient="1" id="record_suggest" role="combobox" spellcheck="false" type="text" value="" /><input name="type" type="hidden" value="person" /><script>new Suggest({ input: $('#record_suggest'), service: '/manage/service/lookup?type=ap&q=', collections: ['Applicants', 'Prospects', 'Prospects (Inactive)'], callback: function(result) { $('#record').val(result.id); $('#record_suggest').css({ color: 'black' }); }, clear: function() { $('#record').val(''); $('#record_suggest').css({ color: 'red' }); } });</script></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="action">
+      <button class="default s-button" onclick="if (FW.Validate(this)) FW.Lazy.Commit(this, { cmd: 'save' });" type="button">Impersonate Volunteer Portal</button>
+    </div>
+    </form>
+  </body>
+</html>
