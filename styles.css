@@ -8,6 +8,10 @@
  padding: 0px !important; 
 }
 
+#register_date{
+ text-align: center; 
+}
+
 .c_inner-container.cr {
    
     padding: 0 20px 1.75em;
@@ -74,9 +78,9 @@ a.replicate_delete {
 a.replicate_insert {
    
   background-color: var(--secondary-text-color);
-  font-size:x-large;
+  font-size:larger;
   font-weight:bold;
-  padding: 30px 10px;
+  padding: 8px 10px;
   text-decoration: none;
   transition: color 0.2s;
   color: white;
