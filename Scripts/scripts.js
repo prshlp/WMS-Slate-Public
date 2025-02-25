@@ -1,159 +1,162 @@
+// Fetch data from the web service asynchronously
 async function getWebServiceResults() {
-    const url = "https://connect.williams.edu/manage/query/run?id=bd96ac3b-6a6c-4417-b045-cb0462542f9d&cmd=service&output=json&h=201c0fb5-d93b-445f-ad0d-ae112ffc296e";
-    try {
-        const response = await fetch(url);
-        if (!response.ok)
-            throw new Error(`HTTP error! status: ${response.status}`);
-        return await response.json()
-    } catch (error) {
-        console.error("Fetching web service data failed:", error)
+  const url = "your-web-service-url"; // Replace with your actual web service URL
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    return await response.json();
+  } catch (error) {
+    console.error("Fetching web service data failed:", error);
+  }
 }
+
+// Check if the form's GUID exists in the retrieved data and execute relevant scripts
 async function checkIfGuidExistsAndRunScripts() {
-    const webServiceData = await getWebServiceResults();
-    if (!webServiceData) {
-        console.log("No web service data available.");
-        return
+  const webServiceData = await getWebServiceResults();
+  if (!webServiceData) return;
+
+  // Get the form's GUID from the input field
+  const inputElement = document.getElementsByName("id")[0];
+  if (!inputElement) return;
+
+  const guidValue = inputElement.value;
+
+  // The key name in the JSON response may vary 
+  //(e.g., "form-guid" instead of "Fguid")
+  const matchingRow = webServiceData.row.find((row) => row.Fguid === guidValue);
+
+  if (matchingRow) {
+    for (const [key, value] of Object.entries(matchingRow)) {
+      // Special case: If the value is a URL, apply it as a background image
+      if (key === "addBgImage" && value.startsWith("https")) {
+        CustomFormScripts.addBgImage(value);
+      } 
+      // If the value is "Yes" and a corresponding function exists, execute it
+      else if (value === "Yes" && typeof CustomFormScripts[key] === "function") {
+        CustomFormScripts[key]();
+      }
     }
-    const inputElement = document.getElementsByName("id")[0];
-    if (!inputElement) {
-        console.log('No input element named "id" found.');
-        return
-    }
-    const guidValue = inputElement.value
-      , matchingRow = webServiceData.row.find(row=>row.Fguid === guidValue);
-    if (matchingRow) {
-        console.log("exists:", guidValue);
-        for (const [key,value] of Object.entries(matchingRow))
-            key === "addBgImage" && value.startsWith("http") ? CustomFormScripts.addBgImage(value) : value === "Yes" && typeof CustomFormScripts[key] == "function" && CustomFormScripts[key]()
-    } else
-        console.log("does not exist:", guidValue)
+  }
 }
+
+// Object containing custom scripts to apply based on user selections
 const CustomFormScripts = {
-    hideMapAndLocation() {
-        $("#register_map").remove();
-        $("#map").remove();
-        $("#register_location").remove()
-    },
+  /**
+   * Removes the map and location fields from the form.
+   */
+  hideMapAndLocation() {
+    $("#register_map, #map, #register_location").remove();
+  },
 
-
-
-    addRedAsteriskToEnd() {
-       
-
-        $(document).ready(function() {
-            $('.form_question[data-required="1"]').each(function() {
-                // Check if the asterisk has already been added
-                if (!$(this).find('.form_label').hasClass('asterisk-added')) {
-                    $(this).find('.form_label').append('<span style="color:red">*</span>').addClass('asterisk-added');
-                }
-            });
-        });
-
-    },
-
-
-
-
-    addRedAsteriskToEndu() {
-        $(".form_question[data-required='1']").each(function() {
-            $(this).find(".form_label").append('<span style="color:red">*<\/span>')
-        })
-    },
-    loadExternalStyles() {
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.type = "text/css";
-        link.href = "/forms/styles.css";
-        document.head.appendChild(link)
-    },
-    replaceRedirect(newUrl) {
-        $("#form_response_banner a").attr("href", newUrl)
-    },
-
-
-    preventPrepopOnAddGuest(){
-
-
-    $(document).ready(function() {
-        var hashTable = {}; // Object to track which replicate IDs have been processed
-        let maxReplicationId = 2; // Initialize with the maximum replication ID encountered so far
-
-        // Immediately hide the delete button for the first replicate block
-        $("tbody.replicate_destination[data-replicate_id='1']")
-            .find("tr.column a.replicate_delete").css('display', 'none');
-
-        // Bind a change event on the document body to handle dynamic content
-        $(document.body).on('change', function() {
-            // Iterate over all tbody elements with a data-replicate_id attribute
-            $("tbody[data-replicate_id]").each(function() {
-                const replicateId = parseInt($(this).data("replicate_id"), 10);
-
-                // If this replicate ID is not in the hashTable, add it
-                if (!hashTable.hasOwnProperty(replicateId)) {
-                    hashTable[replicateId] = true;
-                }
-
-                // Process only if this is the maximum replication ID known and hasn't been processed yet
-                if (replicateId == maxReplicationId && hashTable[replicateId]) {
-                    // Clear input fields within this block
-                    $(this).find("div[data-export='sys:first'], div[data-export='sys:last'], div[data-export='sys:email'], div[data-export='sys:mobile'], div[data-export='sys:field:preferred_class_year'], div[data-export='sys:preferred']")
-                        .find("input[type='text'], input[type='email']").val("");
-                    $(this).find("div[data-export='sys:birthdate']")
-                        .find("select[aria-label='Month'], select[aria-label='Day'], select[aria-label='Year']").val("");
-
-                    // Mark this replicate ID as processed
-                    hashTable[replicateId] = false;
-                }
-            });
-
-            // Update maxReplicationId with the highest replicate ID encountered
-            $("tbody[data-replicate_id]").each(function() {
-                let replicationId = parseInt($(this).data("replicate_id"));
-                if (replicationId > maxReplicationId) {
-                    maxReplicationId = replicationId;
-                }
-            });
-        });
-    });
-},
-
-
-
-    preventPrepopOnAddGuestu() {
-        const observer = new MutationObserver(mutations=>{
-            for (const mutation of mutations)
-                if (mutation.type === "childList")
-                    for (const addedNode of mutation.addedNodes)
-                        if (addedNode.nodeType === 1 && addedNode.nodeName === "TBODY" && addedNode.classList.contains("replicate_destination")) {
-                            const replicateId = parseInt(addedNode.getAttribute("data-replicate_id"), 10);
-                            replicateId > 1 ? ($(addedNode).find("div[data-export='sys:first']").find("input[type='text'],input[type='email']").val(""),
-                            $(addedNode).find("div[data-export='sys:last']").find("input[type='text'],input[type='email']").val(""),
-                            $(addedNode).find("div[data-export='sys:email']").find("input[type='text'],input[type='email']").val(""),
-                            $(addedNode).find("div[data-export='sys:mobile']").find("input[type='tel']").val(""),
-                            $(addedNode).find("div[data-export='sys:field:preferred_class_year']").find("input[type='text'],input[type='email']").val(""),
-                            $(addedNode).find("div[data-export='sys:preferred']").find("input[type='text'],input[type='email']").val(""),
-                            $(addedNode).find("div[data-export='sys:birthdate']").find("select[aria-label='Month'],select[aria-label='Day'],select[aria-label='Year']").val("")) : $(addedNode).find("tr.column a.replicate_delete").css("display", "none")
-                        }
+  /**
+   * Adds a red asterisk to required fields.
+   */
+  addRedAsteriskToEnd() {
+    $(document).ready(() => {
+      $('.form_question[data-required="1"]').each(function () {
+        if (!$(this).find(".form_label").hasClass("asterisk-added")) {
+          $(this)
+            .find(".form_label")
+            .append('<span style="color:red">*</span>')
+            .addClass("asterisk-added");
         }
-        )
-          , targetNode = document.getElementById("replicate_table_form_page_2");
-        targetNode && observer.observe(targetNode, {
-            childList: !0,
-            subtree: !0
-        })
-    },
-    addBgImage: function(url) {
-        const pageElement = document.getElementById("c_page");
-        pageElement.style.backgroundImage = `url('${url}')`;
-        pageElement.style.backgroundSize = "cover";
-        pageElement.style.backgroundPosition = "center";
-        pageElement.style.backgroundRepeat = "no-repeat";
-        console.log("Background image added to #c_page")
-    }
+      });
+    });
+  },
+
+  /**
+   * Loads external styles only if the user has selected this option.
+   */
+  loadExternalStyles() {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = "/forms/styles.css"; // Path to the external styles.css file
+    document.head.appendChild(link);
+  },
+
+  /**
+   * Replaces the default form response banner redirect URL with a new one.
+   * @param {string} newUrl - The new redirect URL.
+   */
+  replaceRedirect(newUrl) {
+    $("#form_response_banner a").attr("href", newUrl);
+  },
+
+  /**
+   * Sets the background image of the page.
+   * @param {string} url - The URL of the background image.
+   */
+  addBgImage(url) {
+    document.body.style.background = `url('${url}') no-repeat center center fixed`;
+    document.body.style.backgroundSize = "cover";
+  },
+
+  /**
+   * Prevents prepopulation of fields when adding a new guest.
+   */
+  preventPrepopOnAddGuest() {
+    $(document).ready(() => {
+      /**
+       * Clears prepopulated fields in newly replicated blocks.
+       * @param {jQuery} $block - The newly added replicate block.
+       */
+      const clearFieldsInNewBlock = ($block) => {
+        const replicateId = $block.data("replicate_id");
+        if (!replicateId || replicateId <= 1) return;
+
+        $block
+          .find(
+            "div[data-export='sys:first'], " +
+              "div[data-export='sys:middle'], " +
+              "div[data-export='sys:last'], " +
+              "div[data-export='sys:email'], " +
+              "div[data-export='sys:mobile'], " +
+              "div[data-export='sys:field:preferred_class_year'], " +
+              "div[data-export='sys:preferred']"
+          )
+          .find("input[type='text'], input[type='email']")
+          .val("");
+
+        $block
+          .find("div[data-export='sys:birthdate']")
+          .find(
+            "select[aria-label='Month'], select[aria-label='Day'], select[aria-label='Year']"
+          )
+          .val("");
+      };
+
+      // Observer to detect newly added replicate blocks
+      const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+          if (mutation.type === "childList" && mutation.addedNodes.length) {
+            $(mutation.addedNodes).each(function () {
+              // Hide the delete link for the first replicate block
+              $("tbody.replicate_destination[data-replicate_id='1']")
+                .find("tr.column a.replicate_delete")
+                .css("display", "none");
+
+              if ($(this).is("tbody.replicate_destination[data-replicate_id]")) {
+                clearFieldsInNewBlock($(this));
+              }
+            });
+          }
+        }
+      });
+
+      // Start observing the document for changes
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+      });
+    });
+  },
 };
 
-
-document.addEventListener("DOMContentLoaded", function() {
-    checkIfGuidExistsAndRunScripts()
+// Run the script once the DOM has fully loaded
+document.addEventListener("DOMContentLoaded", function () {
+  checkIfGuidExistsAndRunScripts();
 });
