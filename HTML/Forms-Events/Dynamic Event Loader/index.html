@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Event Form Loader</title>
+  </head>
+  <body>
+    <!-- Dropdown menu for selecting an event -->
+    <select id="eventSelector">
+      <option value="">Select an Event</option>
+      {% for event in events %}
+      <option value="{{ event.form_guid }}">{{ event.form_title }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Container where the selected event form will be loaded -->
+    <div id="formContainer">
+      Please select an event to load the form.
+    </div>
+
+    <script>
+      document.getElementById("eventSelector").addEventListener("change", function () {
+        var formGuid = this.value; // Get the selected event's unique form ID
+        var formContainer = document.getElementById("formContainer");
+
+        // Remove any previously loaded script
+        var oldScript = document.getElementById("dynamicFormScript");
+        if (oldScript) {
+          oldScript.remove();
+        }
+
+        if (formGuid) {
+          // Show a loading message while the form is being fetched
+          formContainer.innerHTML = "Loading...";
+
+          // Create a new script element to load the event's registration form
+          var script = document.createElement("script");
+          script.id = "dynamicFormScript";
+          script.async = true;
+          script.src =
+            "https://example.com/register/?id=" + // Replace with the appropriate base URL
+            formGuid +
+            "&output=embed&div=formContainer" +
+            (location.search.length > 1 ? "&" + location.search.substring(1) : "");
+
+          // Append the script to the document body, executing the form embed
+          document.body.appendChild(script);
+        } else {
+          // Reset the container message if no event is selected
+          formContainer.innerHTML = "Please select an event to load the form.";
+        }
+      });
+    </script>
+  </body>
+</html>
