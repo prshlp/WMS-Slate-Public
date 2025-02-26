@@ -22,6 +22,6 @@ The dropdown list of events is generated using **Liquid markup**, which pulls da
 <select id="eventSelector">
   <option value="">Select an Event</option>
   {% for event in events %}
-    <option value="{{ event.form_guid }}">{{ event.form_title }}</option>
+    <option value="{{ event.form-guid }}">{{ event.form-title }}</option>
   {% endfor %}
 </select>
